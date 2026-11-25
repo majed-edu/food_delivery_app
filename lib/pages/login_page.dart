@@ -133,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
                     color: colors.secondary,
+                    
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Icon(
