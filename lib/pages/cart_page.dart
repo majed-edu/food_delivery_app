@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/components/my_buttom.dart';
 import 'package:food_delivery_app/components/my_cart_tile.dart';
 import 'package:food_delivery_app/models/restaurant.dart';
+import 'package:food_delivery_app/pages/payment_page.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
@@ -65,7 +66,9 @@ class CartPage extends StatelessWidget {
                   children: [
                     userCart.isEmpty
                         ? Expanded(
-                            child: const Center(child: Text('Your cart is empty.')),
+                            child: const Center(
+                              child: Text('Your cart is empty.'),
+                            ),
                           )
                         : Expanded(
                             child: ListView.builder(
@@ -75,17 +78,23 @@ class CartPage extends StatelessWidget {
                                 return MyCartTile(cartItem: cartItem);
                               },
                             ),
-                      ),
-                
-                      // checkout button
-                       MyButtom(
-                        onTap: () {
-                          // Add the selected food item and its addons to the cart
-                          // addToCart(widget.food, widget.selectedAddons);
-                        },
-                        text: "Go To Checkout",
-                      ),
-                      const SizedBox(height: 25),
+                          ),
+
+                    // checkout button
+                    MyButtom(
+                      onTap: () {
+                        // Add the selected food item and its addons to the cart
+                        // addToCart(widget.food, widget.selectedAddons);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PaymentPage(),
+                          ),
+                        );
+                      },
+                      text: "Go To Checkout",
+                    ),
+                    const SizedBox(height: 25),
                   ],
                 ),
               ),

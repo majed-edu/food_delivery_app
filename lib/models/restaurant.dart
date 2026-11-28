@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/models/cart_item.dart';
+import 'package:intl/intl.dart';
 
 import 'food.dart';
 
@@ -526,7 +527,6 @@ class Restaurant extends ChangeNotifier {
   // - Get the current cart items.
   List<CartItem> get cart => _cart;
 
-
   /*
   Cart operations can be added here:
   */
@@ -597,6 +597,51 @@ class Restaurant extends ChangeNotifier {
 
   // Helper methods can be added here:
   // - Generate the receipt.
-  // - Format money values.
-  // - Format the delivery address.
+  String displayCartReceipt() {
+    final receiptBuffer = StringBuffer();
+    receiptBuffer.writeln('Here is your receipt:');
+    receiptBuffer.writeln('');
+    // format the date to include the seconds only
+    String formattedDate = DateFormat(
+      'yyyy-MM-dd HH:mm:ss',
+    ).format(DateTime.now());
+    receiptBuffer.writeln('Date: $formattedDate');
+    receiptBuffer.writeln();
+    receiptBuffer.writeln('________________________________________');
+
+    for (CartItem cartItem in _cart) {
+      receiptBuffer.writeln(
+        '${cartItem.quantity} x ${cartItem.food.name} - ${_formatPrice(cartItem.food.price)}',
+      );
+      if (cartItem.selectedAddons.isNotEmpty) {
+        receiptBuffer.writeln(
+          '  Addons: ${_formatAddons(cartItem.selectedAddons)}',
+        );
+      }
+      receiptBuffer.writeln();
+    }
+
+    receiptBuffer.writeln('________________________________________');
+    receiptBuffer.writeln();
+    receiptBuffer.writeln('Total Items: ${getTotalItemCount()}');
+    receiptBuffer.writeln('Total Price: ${_formatPrice(getTotalPrice())}');
+    receiptBuffer.writeln('');
+
+    return receiptBuffer.toString();
+  }
+
+  // - Format Price values.
+  String _formatPrice(double price) {
+    return '\$${price.toStringAsFixed(2)}';
+  }
+
+  // - Format list of selected addons for display.
+  String _formatAddons(List<FoodAddon> addons) {
+    if (addons.isEmpty) {
+      return 'No addons selected';
+    }
+    return addons
+        .map((addon) => '${addon.name} (${_formatPrice(addon.price)})')
+        .join(', ');
+  }
 }
